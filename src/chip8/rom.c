@@ -40,5 +40,7 @@ char *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
         chip8_set_ram(ram, ROM_LOAD_ADDRESS + i, rom->data[i]);
     }
 
+    rom->data[size] = '\0';
+
     return rom->data;
 }
