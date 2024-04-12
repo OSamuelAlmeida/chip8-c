@@ -11,7 +11,7 @@ all: $(OBJ)
 	$(CC) $(LDFLAGS) $(OBJ) -o $(EXEC)
 
 run: all
-	./$(EXEC)
+	./$(EXEC) $(ARGS)
 
 build/%.o: src/%.c
 	@mkdir -p $(@D)

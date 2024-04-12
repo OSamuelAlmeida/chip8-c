@@ -18,12 +18,15 @@ chip8 *chip8_create()
 {
     chip8 *chip8 = malloc(sizeof(chip8));
     chip8->window = chip8_create_window();
+    chip8->ram = chip8_create_ram();
     return chip8;
 }
 
 void chip8_destroy(chip8 *chip8)
 {
     chip8_destroy_window(chip8->window);
+    chip8_destroy_ram(chip8->ram);
+    chip8_destroy_rom(chip8->rom);
     free(chip8);
 }
 
@@ -35,7 +38,9 @@ static void chip8_loop(chip8_window *window)
     }
 }
 
-void chip8_run(chip8 *chip8)
+void chip8_run(chip8 *chip8, const char *rom_path)
 {
-    chip8_window_loop(chip8->window, chip8_loop);
+    chip8->rom = chip8_create_rom(rom_path);
+    chip8_load_rom(chip8->rom, chip8->ram);
+    chip8_loop_window(chip8->window, chip8_loop);
 }

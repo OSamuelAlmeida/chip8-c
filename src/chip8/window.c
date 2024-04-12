@@ -29,7 +29,7 @@ static void chip8_clear_window(chip8_window *window)
     SDL_RenderClear(window->renderer);
 }
 
-void chip8_window_loop(chip8_window *window, chip8_window_loop_func func)
+void chip8_loop_window(chip8_window *window, chip8_window_loop_func func)
 {
     window->running = 1;
 
