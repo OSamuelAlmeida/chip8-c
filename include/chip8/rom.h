@@ -7,7 +7,7 @@
 typedef struct
 {
     const char *path;
-    char *data;
+    uint8_t *data;
 } chip8_rom;
 
 chip8_rom *chip8_create_rom(const char *path);

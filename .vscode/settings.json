@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "window.h": "c",
-    "chip8.h": "c"
+    "chip8.h": "c",
+    "cstring": "c"
   }
 }

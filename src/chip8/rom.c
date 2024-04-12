@@ -20,8 +20,6 @@ void chip8_destroy_rom(chip8_rom *rom)
 
 char *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
 {
-    free(rom->data);
-
     FILE *fp = fopen(rom->path, "rb");
     if (fp == NULL)
     {
@@ -33,7 +31,7 @@ char *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
     size_t size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    rom->data = malloc(size + 1);
+    rom->data = calloc(size + 1, sizeof(uint8_t));
 
     fread(rom->data, 1, size, fp);
     fclose(fp);

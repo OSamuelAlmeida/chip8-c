@@ -3,12 +3,17 @@
 
 #include <SDL2/SDL.h>
 
+#define CHIP8_DISPLAY_WIDTH 64
+#define CHIP8_DISPLAY_HEIGHT 32
+
 typedef struct
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    SDL_Texture *texture;
     SDL_Event event;
     int running;
+    uint32_t *pixels;
 } chip8_window;
 
 typedef void (*chip8_window_loop_func)(chip8_window *window);

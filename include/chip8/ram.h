@@ -3,9 +3,11 @@
 
 #include <stdlib.h>
 
+#define CHIP8_RAM_SIZE 4096
+
 typedef struct
 {
-    uint8_t data[4096];
+    uint8_t data[CHIP8_RAM_SIZE];
 } chip8_ram;
 
 chip8_ram *chip8_create_ram();
