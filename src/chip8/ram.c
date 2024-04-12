@@ -21,16 +21,10 @@ const uint8_t chip8_fontset[80] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-chip8_ram *chip8_create_ram()
+void chip8_create_ram(chip8_ram *ram)
 {
-    chip8_ram *ram = malloc(sizeof(chip8_ram));
+    memset(ram->data, 0, sizeof(ram->data));
     memcpy(ram->data + 0x50, chip8_fontset, sizeof(chip8_fontset));
-    return ram;
-}
-
-void chip8_destroy_ram(chip8_ram *ram)
-{
-    free(ram);
 }
 
 void chip8_set_ram(chip8_ram *ram, uint16_t address, uint8_t value)

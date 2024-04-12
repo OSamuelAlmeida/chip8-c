@@ -13,12 +13,12 @@ typedef struct
     SDL_Texture *texture;
     SDL_Event event;
     int running;
-    uint32_t *pixels;
+    uint32_t pixels[CHIP8_DISPLAY_WIDTH * CHIP8_DISPLAY_HEIGHT];
 } chip8_window;
 
 typedef void (*chip8_window_loop_func)(chip8_window *window);
 
-chip8_window *chip8_create_window();
+void chip8_create_window(chip8_window *window);
 
 void chip8_loop_window(chip8_window *window, chip8_window_loop_func func);
 

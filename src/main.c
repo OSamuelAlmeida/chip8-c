@@ -17,9 +17,10 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    chip8 *chip8 = chip8_create();
-    chip8_run(chip8, argv[1]);
-    chip8_destroy(chip8);
+    chip8_t chip8;
+    chip8_create(&chip8);
+    chip8_run(&chip8, argv[1]);
+    chip8_destroy(&chip8);
 
     return 0;
 }

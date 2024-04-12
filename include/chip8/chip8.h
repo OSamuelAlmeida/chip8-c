@@ -8,16 +8,16 @@
 
 typedef struct
 {
-    chip8_window *window;
-    chip8_cpu *cpu;
-    chip8_ram *ram;
-    chip8_rom *rom;
-} chip8;
+    chip8_window window;
+    chip8_cpu cpu;
+    chip8_ram ram;
+    chip8_rom rom;
+} chip8_t;
 
 int chip8_init();
-chip8 *chip8_create();
-void chip8_destroy(chip8 *chip8);
+void chip8_create(chip8_t *chip8);
+void chip8_destroy(chip8_t *chip8);
 
-void chip8_run(chip8 *chip8, const char *rom_path);
+void chip8_run(chip8_t *chip8, const char *rom_path);
 
 #endif

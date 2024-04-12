@@ -5,17 +5,14 @@
 
 #define ROM_LOAD_ADDRESS 0x200
 
-chip8_rom *chip8_create_rom(const char *path)
+void chip8_create_rom(chip8_rom *rom, const char *path)
 {
-    chip8_rom *rom = malloc(sizeof(chip8_rom));
     rom->path = path;
-    return rom;
 }
 
 void chip8_destroy_rom(chip8_rom *rom)
 {
     free(rom->data);
-    free(rom);
 }
 
 char *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
