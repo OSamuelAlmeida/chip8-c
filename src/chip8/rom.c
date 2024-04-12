@@ -14,6 +14,7 @@ chip8_rom *chip8_create_rom(const char *path)
 
 void chip8_destroy_rom(chip8_rom *rom)
 {
+    free(rom->data);
     free(rom);
 }
 
