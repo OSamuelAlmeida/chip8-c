@@ -15,7 +15,7 @@ void chip8_destroy_rom(chip8_rom *rom)
     free(rom->data);
 }
 
-char *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
+uint8_t *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
 {
     FILE *fp = fopen(rom->path, "rb");
     if (fp == NULL)

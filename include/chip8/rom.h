@@ -13,6 +13,6 @@ typedef struct
 void chip8_create_rom(chip8_rom *rom, const char *path);
 void chip8_destroy_rom(chip8_rom *rom);
 
-char *chip8_load_rom(chip8_rom *rom, chip8_ram *ram);
+uint8_t *chip8_load_rom(chip8_rom *rom, chip8_ram *ram);
 
 #endif
