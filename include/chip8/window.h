@@ -16,11 +16,11 @@ typedef struct
     uint32_t pixels[CHIP8_DISPLAY_WIDTH * CHIP8_DISPLAY_HEIGHT];
 } chip8_window;
 
-typedef void (*chip8_window_loop_func)(chip8_window *window);
+typedef void (*chip8_window_loop_func)(chip8_window *window, void *data);
 
 void chip8_create_window(chip8_window *window);
 
-void chip8_loop_window(chip8_window *window, chip8_window_loop_func func);
+void chip8_loop_window(chip8_window *window, chip8_window_loop_func func, void *data);
 
 void chip8_destroy_window(chip8_window *window);
 

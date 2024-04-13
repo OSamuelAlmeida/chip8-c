@@ -4,6 +4,7 @@
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 320
+#define WINDOW_FPS 60.0
 
 void chip8_create_window(chip8_window *window)
 {
@@ -14,12 +15,14 @@ void chip8_create_window(chip8_window *window)
     memset(window->pixels, 0, sizeof(window->pixels));
 }
 
-static void chip8_handle_event(chip8_window *window)
+static void chip8_handle_events(chip8_window *window)
 {
-    SDL_PollEvent(&window->event);
-    if (window->event.type == SDL_QUIT)
+    while (SDL_PollEvent(&window->event))
     {
-        window->running = 0;
+        if (window->event.type == SDL_QUIT)
+        {
+            window->running = 0;
+        }
     }
 }
 
@@ -29,20 +32,27 @@ static void chip8_clear_window(chip8_window *window)
     SDL_RenderClear(window->renderer);
 }
 
-void chip8_loop_window(chip8_window *window, chip8_window_loop_func func)
+void chip8_loop_window(chip8_window *window, chip8_window_loop_func func, void *data)
 {
+    uint32_t ticks = SDL_GetTicks();
+
     window->running = 1;
 
     while (window->running)
     {
-        chip8_handle_event(window);
-        func(window);
+        if (SDL_GetTicks() - ticks >= 1000 / WINDOW_FPS)
+        {
+            chip8_handle_events(window);
+            func(window, data);
 
-        SDL_UpdateTexture(window->texture, NULL, window->pixels, CHIP8_DISPLAY_WIDTH * sizeof(uint32_t));
-        SDL_RenderCopy(window->renderer, window->texture, NULL, NULL);
-        SDL_RenderPresent(window->renderer);
+            SDL_UpdateTexture(window->texture, NULL, window->pixels, CHIP8_DISPLAY_WIDTH * sizeof(uint32_t));
+            SDL_RenderCopy(window->renderer, window->texture, NULL, NULL);
+            SDL_RenderPresent(window->renderer);
 
-        chip8_clear_window(window);
+            chip8_clear_window(window);
+
+            ticks = SDL_GetTicks();
+        }
     }
 }
 
