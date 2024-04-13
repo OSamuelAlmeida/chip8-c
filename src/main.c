@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <SDL2/SDL.h>
 
 #include "chip8/chip8.h"
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s <rom_path>\n", argv[0]);

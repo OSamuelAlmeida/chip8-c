@@ -2,6 +2,7 @@
   "files.associations": {
     "window.h": "c",
     "chip8.h": "c",
-    "ram.h": "c"
+    "ram.h": "c",
+    "keyboard.h": "c"
   }
 }
