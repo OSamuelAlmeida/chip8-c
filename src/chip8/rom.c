@@ -8,11 +8,13 @@
 void chip8_create_rom(chip8_rom *rom, const char *path)
 {
     rom->path = path;
+    rom->data = NULL;
 }
 
 void chip8_destroy_rom(chip8_rom *rom)
 {
-    free(rom->data);
+    if (rom->data != NULL)
+        free(rom->data);
 }
 
 uint8_t *chip8_load_rom(chip8_rom *rom, chip8_ram *ram)
