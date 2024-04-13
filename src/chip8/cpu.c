@@ -21,13 +21,13 @@ void chip8_create_cpu(chip8_cpu *cpu)
 
 void chip8_execute_opcode(chip8_cpu *cpu, uint16_t opcode, chip8_window *window, chip8_ram *ram)
 {
-    printf("Opcode: %04X\n", opcode);
     cpu->pc += 2;
-    uint8_t n = opcode & 0x000F;
-    uint8_t nn = opcode & 0x00FF;
-    uint8_t nnn = opcode & 0x0FFF;
-    uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x00F0) >> 4;
+    uint16_t n = opcode & 0x000F;
+    uint16_t nn = opcode & 0x00FF;
+    uint16_t nnn = opcode & 0x0FFF;
+    uint16_t x = (opcode & 0x0F00) >> 8;
+    uint16_t y = (opcode & 0x00F0) >> 4;
+    uint8_t tmp = 0;
 
     switch (opcode & 0xF000)
     {
@@ -41,8 +41,8 @@ void chip8_execute_opcode(chip8_cpu *cpu, uint16_t opcode, chip8_window *window,
         cpu->pc = nnn;
         break;
     case 0x2000:
-        cpu->stack[cpu->sp] = cpu->pc;
-        cpu->sp++;
+        cpu->stack[cpu->sp++] = cpu->pc;
+        cpu->pc = nnn;
         break;
     case 0x3000:
         if (cpu->registers[x] == nn)
@@ -70,41 +70,38 @@ void chip8_execute_opcode(chip8_cpu *cpu, uint16_t opcode, chip8_window *window,
             break;
         case 0x0001:
             cpu->registers[x] |= cpu->registers[y];
+            cpu->registers[0xF] = 0;
             break;
         case 0x0002:
             cpu->registers[x] &= cpu->registers[y];
+            cpu->registers[0xF] = 0;
             break;
         case 0x0003:
             cpu->registers[x] ^= cpu->registers[y];
+            cpu->registers[0xF] = 0;
             break;
         case 0x0004:
+            tmp = cpu->registers[x];
             cpu->registers[x] += cpu->registers[y];
-            if (cpu->registers[x] > 0xFF)
-                cpu->registers[0xF] = 1;
-            else
-                cpu->registers[0xF] = 0;
+            cpu->registers[0xF] = tmp > cpu->registers[x];
             break;
         case 0x0005:
-            if (cpu->registers[y] > cpu->registers[x])
-                cpu->registers[0xF] = 1;
-            else
-                cpu->registers[0xF] = 0;
+            tmp = cpu->registers[x];
             cpu->registers[x] -= cpu->registers[y];
+            cpu->registers[0xF] = tmp >= cpu->registers[y];
             break;
         case 0x0006:
-            cpu->registers[0xF] = cpu->registers[x] & 0x1;
-            cpu->registers[x] >>= 1;
+            cpu->registers[x] = cpu->registers[y] >> 1;
+            cpu->registers[0xF] = cpu->registers[y] & 0x1;
             break;
         case 0x0007:
-            if (cpu->registers[x] > cpu->registers[y])
-                cpu->registers[0xF] = 1;
-            else
-                cpu->registers[0xF] = 0;
+            tmp = cpu->registers[y];
             cpu->registers[x] = cpu->registers[y] - cpu->registers[x];
+            cpu->registers[0xF] = tmp > cpu->registers[x];
             break;
         case 0x000E:
-            cpu->registers[0xF] = cpu->registers[x] >> 7;
-            cpu->registers[x] <<= 1;
+            cpu->registers[x] = cpu->registers[y] << 1;
+            cpu->registers[0xF] = cpu->registers[y] >> 7;
             break;
         }
         break;
@@ -151,6 +148,7 @@ void chip8_execute_opcode(chip8_cpu *cpu, uint16_t opcode, chip8_window *window,
                 {
                     cpu->registers[x] = i;
                     cpu->pc += 2;
+                    break;
                 }
             }
             break;
@@ -173,11 +171,13 @@ void chip8_execute_opcode(chip8_cpu *cpu, uint16_t opcode, chip8_window *window,
             break;
         case 0x0055:
             for (int i = 0; i <= x; i++)
-                cpu->registers[i] = ram->data[cpu->I + i];
+                ram->data[cpu->I + i] = cpu->registers[i];
+            cpu->I++;
             break;
         case 0x0065:
             for (int i = 0; i <= x; i++)
-                ram->data[cpu->I + i] = cpu->registers[i];
+                cpu->registers[i] = ram->data[cpu->I + i];
+            cpu->I++;
             break;
         }
         break;

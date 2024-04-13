@@ -40,7 +40,7 @@ static void chip8_loop(chip8_window *window, void *data)
 
         for (int i = 0; i < CHIP8_CPU_CLOCK_SPEED; i++)
         {
-            uint16_t opcode = chip8->ram.data[chip8->cpu.pc] << 8 | chip8->ram.data[chip8->cpu.pc + 1];
+            uint16_t opcode = (chip8->ram.data[chip8->cpu.pc] << 8) | chip8->ram.data[chip8->cpu.pc + 1];
             chip8_execute_opcode(&chip8->cpu, opcode, window, &chip8->ram);
         }
     }
@@ -53,6 +53,6 @@ static void chip8_loop(chip8_window *window, void *data)
 void chip8_run(chip8_t *chip8, const char *rom_path)
 {
     chip8_create_rom(&chip8->rom, rom_path);
-    chip8_load_rom(&chip8->rom, &chip8->ram);
-    chip8_loop_window(&chip8->window, chip8_loop, chip8);
+    if (chip8_load_rom(&chip8->rom, &chip8->ram) != NULL)
+        chip8_loop_window(&chip8->window, chip8_loop, chip8);
 }

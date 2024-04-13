@@ -74,23 +74,32 @@ void chip8_draw_sprite(chip8_window *window, uint8_t *sprite, uint8_t x, uint8_t
 
     for (int j = 0; j < n; j++)
     {
+        if (y + j >= CHIP8_DISPLAY_HEIGHT)
+        {
+            break;
+        }
+
         for (int i = 0; i < 8; i++)
         {
             uint8_t pixel = sprite[j] & (0x80 >> i);
+
+            if (x + i >= CHIP8_DISPLAY_WIDTH)
+            {
+                break;
+            }
+
             if (pixel & (0x80 >> i))
             {
                 int index =
-                    (x + i) % CHIP8_DISPLAY_WIDTH +
+                    (x + i) +
                     ((y + j) % CHIP8_DISPLAY_HEIGHT) * CHIP8_DISPLAY_WIDTH;
+
                 if (window->pixels[index] == 0xFFFFFFFF)
                 {
                     *vf = 1;
-                    window->pixels[index] = 0xFF000000;
                 }
-                else
-                {
-                    window->pixels[index] = 0xFFFFFFFF;
-                }
+
+                window->pixels[index] ^= 0xFFFFFFFF;
             }
         }
     }
